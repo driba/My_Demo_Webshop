@@ -1,5 +1,7 @@
-﻿using demo_webshop.Models;
+﻿using demo_webshop.Data;
+using demo_webshop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace demo_webshop.Controllers
@@ -7,10 +9,11 @@ namespace demo_webshop.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext _context; // Dependency injection
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -23,9 +26,13 @@ namespace demo_webshop.Controllers
             return View();
         }
 
+        // GET; /home/Products
         public IActionResult Product()
         {
-            return View();
+            List<Product> products = _context.Products.ToList();
+
+
+            return View(products);
         }
 
 

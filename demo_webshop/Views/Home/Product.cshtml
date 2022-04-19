@@ -1,1 +1,41 @@
-﻿<h4>U izradi...</h4>
+﻿@model List<Product>
+
+<h3>Product list</h3>
+</hr>
+
+<div class="row">
+    @*Filter s kategorijama*@    
+</div>
+
+<div class="row">
+    @*Ispis svih proizvoda, bootstrap "card"*@
+    @foreach(var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5>@item.Title</h5>
+                    <p class="card-text">@item.Description</p>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@item.Price Kn</td>
+                                <td>
+                                    @*TODO: Forma za dodavanje u košaricu*@
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
