@@ -1,20 +1,43 @@
 ﻿@model List<Product>
 
 <h3>Product list</h3>
-</hr>
+<hr>
 
-<div class="row">
-    @*Filter s kategorijama*@    
+<div class="row mb-5">
+    @*Filter s kategorijama*@
+    <div class="col-6">
+
+        <form method="GET" asp-area="" asp-controller="Home" asp-action="Product">
+
+            <div class="input-group mb-3">
+                    
+                <select class="form-select" id="floatingSelect" name="categoryId">
+                    <option selected value="">All</option>
+                    @foreach(var category in ViewBag.Categories)
+                    {
+                    <option value="@category.Id">@category.Title</option>
+                    }
+                </select>
+                   
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+           
+        </form>
+        
+    </div>
 </div>
 
 <div class="row">
-    @*Ispis svih proizvoda, bootstrap "card"*@
+    @*Ispis svih proizvoda*@
     @foreach(var item in Model)
     {
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5>@item.Title</h5>
+
+                    <h5 class="card-title">@item.Title</h5>
                     <p class="card-text">@item.Description</p>
 
                     <table class="table">
@@ -26,16 +49,22 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>@item.Price Kn</td>
+                                <td>@item.Price kn</td>
                                 <td>
                                     @*TODO: Forma za dodavanje u košaricu*@
+                                    <form method="POST">
+                                        <input type="hidden" name="productId" value="@item.Id">
+                                        <input type="number" name="quantity" class="form-control">
+                                        <button type="submit" class="btn btn-success">Add to cart</button>
+                                    </form>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
     }
-
 </div>
+

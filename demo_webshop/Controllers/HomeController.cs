@@ -27,10 +27,27 @@ namespace demo_webshop.Controllers
         }
 
         // GET; /home/Products
-        public IActionResult Product()
+        public IActionResult Product(int? categoryId)
         {
-            List<Product> products = _context.Products.ToList();
 
+            //List<Product> products = _context.Products.ToList();
+            List<Product> products = (categoryId != null) ?
+                // ako categoryId postoji
+            _context.Products.Where( // popis svih proizvoda i postavljamo kriterij
+                p => _context.ProductCategories.Where(
+                    pc => pc.CategoryId == categoryId  // ako je u tablici ProductCategories vrijednost stupca CategoryId = categoryId
+                    ).Select(
+                        pc => pc.ProductId // ako je kriterij zadobojen, vrati vrijednost stupca productId
+                        ).ToList().Contains(
+                            p.Id  // Nakon toga, vrati objekte klase Product, čiji ID se nalazi u rezultatu kriterija
+                        )
+                        ).ToList() :
+                        //ako categoryId ne postoji
+            _context.Products.ToList();
+
+            
+
+            ViewBag.Categories = _context.Categories.ToList();
 
             return View(products);
         }
