@@ -19,9 +19,9 @@ namespace demo_webshop.Areas.Admin.Controllers
 
 
         // GET: Admin/Product
-        public ActionResult Index()
+        public ActionResult Index(string? message)
         {
-
+            ViewBag.ProductMessage = message;
             return View(_context.Products.ToList());
         }
 
@@ -132,8 +132,11 @@ namespace demo_webshop.Areas.Admin.Controllers
 
             ViewBag.Categories = _context.Categories.ToList();
             ViewBag.CategoryErrorMessage = error_message;
+
+            // Dohvati Id kategorija s kojima je proizvod povezan u tablici ProductCategory i kao rezultat vrati listu
             ViewBag.CheckedCategories = _context.ProductCategories.Where(pd => pd.ProductId == id).Select(pd => pd.CategoryId).ToList();
 
+            
             return View(product);
         }
 

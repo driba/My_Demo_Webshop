@@ -1,27 +1,17 @@
 ﻿@model List<demo_webshop.Models.Category>
-@{
-    string chk = "";
-}
 
 @foreach(var category_item in Model) {
-    <div class="form-check">
-        
-        @if(ViewBag.CheckedCategories == null)
+    string is_checked = "";
+    @if(ViewBag.CheckedCategories != null)
+    {
+        @if (ViewBag.CheckedCategories.Contains(category_item.Id))
         {
-            <input class="form-check-input" type="checkbox" name="category_id[]" value="@category_item.Id">
+            is_checked = "checked";
         }
-        else
-        {
-            @if(ViewBag.CheckedCategories.Contains(category_item.Id))
-            {
-                <input class="form-check-input" type="checkbox" name="category_id[]" value="@category_item.Id" checked>
-            }
-            else
-            {
-                 <input class="form-check-input" type="checkbox" name="category_id[]" value="@category_item.Id">
-            }
 
     }
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="category_id[]" value="@category_item.Id" checked>
         <label class="form-check-label" for="flexCheckDefault">
         @category_item.Title
         </label>

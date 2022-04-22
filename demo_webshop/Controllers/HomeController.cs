@@ -18,11 +18,21 @@ namespace demo_webshop.Controllers
 
         public IActionResult Index()
         {
+            // Jednostavni test za provjeru ako je sesija aktivna
+            // ViewBag.CheckSession = HttpContext.Session.IsAvailable;
+
+            // Test za kreiranje sesije
+            HttpContext.Session.SetString("test", "Hej, ja sam sesija");
+            // 
+            ViewBag.GetTest = HttpContext.Session.GetString("test");
+
             return View();
         }
 
         public IActionResult Privacy()
         {
+            ViewBag.GetTest = HttpContext.Session.GetString("test");
+
             return View();
         }
 

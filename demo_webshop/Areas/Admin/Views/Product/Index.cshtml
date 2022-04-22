@@ -6,6 +6,12 @@
 <p>
     <a asp-action="Create">Create new</a>
 </p>
+
+@if(ViewBag.ProductMessage != null)
+{
+    <div class="alert alert-info">@ViewBag.ProductMessage</div>
+}
+
 <table class="table">
     <thead>
         <tr>

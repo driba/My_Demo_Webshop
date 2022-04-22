@@ -8,6 +8,7 @@
 
 <h4>Product</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -40,8 +41,6 @@
                 {
                     <div class="alert alert-danger">@ViewBag.CategoryErrorMessage</div>
                 }
-                
-
                if(ViewBag.Categories.Count <= 10)
                {
                     <partial name="~/Areas/Admin/Views/Shared/_CategoryCheckboxPartial.cshtml" model="@ViewBag.Categories" />
