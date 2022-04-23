@@ -2,7 +2,9 @@
 
 <h3>Product list</h3>
 <hr>
-
+@if (ViewBag.Message != null)
+{    <div class="alert alert-danger">@ViewBag.Message</div>  
+}
 <div class="row mb-5">
     @*Filter s kategorijama*@
     <div class="col-6">
@@ -55,9 +57,11 @@
                                     <form method="POST" asp-area="" asp-controller="Cart" asp-action="AddToCart">
                                         <input type="hidden" name="productId" value="@item.Id">
                                         <div class="input-group mb-3">
-                                            <input type="number" name="quantity" class="form-control" min="1" max="@item.Quantity">
+                                            <input type="number" name="quantity" class="form-control-sm" min="1" max="@item.Quantity">
                                             <div class="input-group-append">
-                                                <button type="submit" class="btn btn-success">Add to cart</button>
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fa-solid fa-cart-plus"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </form>

@@ -37,7 +37,7 @@ namespace demo_webshop.Controllers
         }
 
         // GET; /home/Products
-        public IActionResult Product(int? categoryId)
+        public IActionResult Product(int? categoryId, string? message)
         {
 
             //List<Product> products = _context.Products.ToList();
@@ -47,7 +47,7 @@ namespace demo_webshop.Controllers
                 p => _context.ProductCategories.Where(
                     pc => pc.CategoryId == categoryId  // ako je u tablici ProductCategories vrijednost stupca CategoryId = categoryId
                     ).Select(
-                        pc => pc.ProductId // ako je kriterij zadobojen, vrati vrijednost stupca productId
+                        pc => pc.ProductId // ako je kriterij zadovoljen, vrati vrijednost stupca productId
                         ).ToList().Contains(
                             p.Id  // Nakon toga, vrati objekte klase Product, čiji ID se nalazi u rezultatu kriterija
                         )
@@ -55,6 +55,11 @@ namespace demo_webshop.Controllers
                         //ako categoryId ne postoji
             _context.Products.ToList();
 
+            if (message != null)
+            {
+                ViewBag.Message = message;
+            }
+            
             
 
             ViewBag.Categories = _context.Categories.ToList();

@@ -46,7 +46,7 @@ namespace demo_webshop.Controllers
                 // popuni ga podacima pa spremi sesiju
                 if (quantity > find_product.Quantity)
                 {
-                    return RedirectToAction("Index", new { msg = "Nije moguće dodati proiyvod u košaricu." }); // bolje vratiti u Product/Index
+                    return RedirectToAction("Product", "Home", new { msg = "Nije moguće dodati proizvod u košaricu." }); // bolje vratiti u Product/Index
                 }
 
                 CartItem new_item = new CartItem()

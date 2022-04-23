@@ -8,7 +8,11 @@
 
 <h4>Product</h4>
 <hr />
-
+@if(ViewBag.ProductMessage == "Proizvod uspješno ažuriran!")
+{
+    <div class="alert alert-info">@ViewBag.ProductMessage</div>
+    ViewBag.ProductMessage = null;
+}
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -37,9 +41,9 @@
 
             @if(ViewBag.Categories.Count > 0)
             {
-                if(ViewBag.CategoryErrorMessage != null)
+                if(ViewBag.ProductMessage != null)
                 {
-                    <div class="alert alert-danger">@ViewBag.CategoryErrorMessage</div>
+                    <div class="alert alert-danger mt-3">@ViewBag.ProductMessage</div>
                 }
                if(ViewBag.Categories.Count <= 10)
                {

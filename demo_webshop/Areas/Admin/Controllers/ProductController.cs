@@ -19,9 +19,9 @@ namespace demo_webshop.Areas.Admin.Controllers
 
 
         // GET: Admin/Product
-        public ActionResult Index(string? message)
+        public ActionResult Index(string? msg)
         {
-            ViewBag.ProductMessage = message;
+            ViewBag.ProductMessage = msg;
             return View(_context.Products.ToList());
         }
 
@@ -113,7 +113,7 @@ namespace demo_webshop.Areas.Admin.Controllers
         }
 
         // GET: Admin/Product/Edit/5
-        public ActionResult Edit(int id, string? error_message)
+        public ActionResult Edit(int id, string? message)
         {
             // Provjera
             if (id == 0)
@@ -131,11 +131,10 @@ namespace demo_webshop.Areas.Admin.Controllers
             }
 
             ViewBag.Categories = _context.Categories.ToList();
-            ViewBag.CategoryErrorMessage = error_message;
+            ViewBag.ProductMessage = message;
 
             // Dohvati Id kategorija s kojima je proizvod povezan u tablici ProductCategory i kao rezultat vrati listu
             ViewBag.CheckedCategories = _context.ProductCategories.Where(pd => pd.ProductId == id).Select(pd => pd.CategoryId).ToList();
-
             
             return View(product);
         }
@@ -183,11 +182,12 @@ namespace demo_webshop.Areas.Admin.Controllers
 
                 _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return Edit(product.Id, "Proizvod uspješno ažuriran!");
+
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return Edit(product.Id, ex.Message);
             }
         }
 
