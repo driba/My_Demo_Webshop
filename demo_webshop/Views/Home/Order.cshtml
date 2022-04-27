@@ -1,0 +1,59 @@
+﻿@model List<demo_webshop.Extensions.CartItem>
+
+<div class="text-center">
+    <h1>Place your order</h1>
+</div>
+<hr />
+
+@* 1. Ispis podataka iz kosarice *@
+<div class="row">
+    <div class="col">
+
+        <div class="text-center">
+            <h5>Cart Items</h5>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>                        
+                        <td>@item.Product.Title</td>
+                        <td>@item.Product.Price</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.GetTotal()</td>
+                   </tr>                    
+                }
+                <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <b>Total price: @ViewBag.TotalPrice.ToString("0.00") kn</b>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+@* 2. polja za unos podataka kupca*@
+<div class="row">
+    <div class="col">
+        <div class="text-center">
+            <h5>Personal information</h5>
+        </div>
+        <form method="POST" asp-controller="Home" asp-action="Order">
+
+        </form>
+    </div>
+</div>

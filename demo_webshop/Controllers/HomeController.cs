@@ -1,4 +1,5 @@
 ﻿using demo_webshop.Data;
+using demo_webshop.Extensions;
 using demo_webshop.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace demo_webshop.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context; // Dependency injection
+        private const string SessionKeyName = "_cart";
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
@@ -66,6 +68,25 @@ namespace demo_webshop.Controllers
 
             return View(products);
         }
+
+        // GET: Home/Order
+        public IActionResult Order()
+        {
+            List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(SessionKeyName) ?? new List<CartItem>();
+
+            if (cart.Count == 0)
+            {
+                return RedirectToAction("Product");
+            }
+
+            decimal sum = 0;
+            ViewBag.TotalPrice = cart.Sum(item => sum + item.GetTotal());
+
+            return View(cart);
+        
+        }
+
+        // POST: Home/Order
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -22,6 +22,9 @@ namespace demo_webshop.Controllers
         {
             List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(SessionKeyName) ?? new List<CartItem>();
 
+            decimal sum = 0;
+            ViewBag.TotalPrice = cart.Sum(item => sum + item.GetTotal());
+
             return View(cart);
         }
 
@@ -30,6 +33,9 @@ namespace demo_webshop.Controllers
         [HttpPost]
         public IActionResult AddToCart(int productId, decimal quantity)
         {
+            //TODO: Ispraviti BUG koji omogućuje dodavanje proizvoda s 0 količinom!
+
+
             // Korak 1: Provjeri sesiju i ako postoji proizvod
             List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(SessionKeyName) ?? new List<CartItem>();
 
@@ -46,7 +52,7 @@ namespace demo_webshop.Controllers
                 // popuni ga podacima pa spremi sesiju
                 if (quantity > find_product.Quantity)
                 {
-                    return RedirectToAction("Product", "Home", new { msg = "Nije moguće dodati proizvod u košaricu." }); // bolje vratiti u Product/Index
+                    return RedirectToAction("Product", "Home", new { message = "Nije moguće dodati proizvod u košaricu." }); // bolje vratiti u Product/Index
                 }
 
                 CartItem new_item = new CartItem()
@@ -61,13 +67,45 @@ namespace demo_webshop.Controllers
             }
             else
             {
-                // Korak 3: Ako kosarica nije prazna, dodaj novi proizvod ili azuriraj kolicinu postojeceg,
+                // Korak 3: Ako kosarica nije prazna, a isti proizvod postoji, azuriraj kolicinu postojeceg,
                 // pa pohrani opet u sesiju
+
+                // Provjeravamo stavke kosarice, ali proizvod ne postoji u njoj, dodaj ga i pohrani opet u sesiju
+                var update_or_create_product = cart.Find(p => p.Product.Id == productId) ?? new CartItem();
+
+                if (quantity + update_or_create_product.Quantity > find_product.Quantity)
+                {
+                    return RedirectToAction("Product", "Home", new { message = "Nije dozvoljena dodana količina, maksimalno je dozvoljeno " + find_product.Quantity });
+                }
+
+                if (update_or_create_product.Quantity == 0)
+                {
+                    update_or_create_product.Product = find_product;
+                    update_or_create_product.Quantity = quantity;
+                    cart.Add(update_or_create_product);
+                }
+                else
+                {
+                    update_or_create_product.Quantity += quantity;
+                }
+
+                HttpContext.Session.SetObjectAsJson(SessionKeyName, cart);
             }
 
             return RedirectToAction("Index");
         }
-        // TODO: RemoveFromCart(int productId)
 
+
+        // TODO: RemoveFromCart(int productId)
+        public IActionResult RemoveFromCart(int productId)
+        {
+            List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(SessionKeyName) ?? new List<CartItem>();
+
+            cart.RemoveAll(p => p.Product.Id == productId);
+
+            HttpContext.Session.SetObjectAsJson(SessionKeyName, cart);
+
+            return RedirectToAction("Index");
+        }
     }
 }
