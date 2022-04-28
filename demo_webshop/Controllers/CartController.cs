@@ -34,7 +34,10 @@ namespace demo_webshop.Controllers
         public IActionResult AddToCart(int productId, decimal quantity)
         {
             //TODO: Ispraviti BUG koji omogućuje dodavanje proizvoda s 0 količinom!
-
+            if (quantity <= 0)
+            {
+                return RedirectToAction("Product", "Home", new { message = "Molimo odaberite količinu proizvoda." }); 
+            }
 
             // Korak 1: Provjeri sesiju i ako postoji proizvod
             List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(SessionKeyName) ?? new List<CartItem>();
