@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using demo_webshop.Data;
 
 namespace demo_webshop.Models
@@ -20,43 +21,43 @@ namespace demo_webshop.Models
 
 
         [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
-        public string UserId { get; set; }
+        public ApplicationUser? User { get; set; }
+        public string? UserId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "First name is required")]
         [StringLength(50, MinimumLength = 2)]
         public string BillingFirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Last name is required")]
         [StringLength(50, MinimumLength = 2)]
         public string BillingLastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
         [StringLength(100)]
         public string BillingEmail { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Phone number is required")]
         [StringLength(100)]
         public string BillingPhone { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Adress is required")]
         [StringLength(150)]
         public string BillingAddress { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "City is required")]
         [StringLength(50)]
         public string BillingCity { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Country is required")]
         [StringLength(50)]
         public string BillingCountry { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Postal code is required")]
         [StringLength(10)]
         public string BillingZip { get; set; }
 
         [StringLength(3000)]
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
     }
 }

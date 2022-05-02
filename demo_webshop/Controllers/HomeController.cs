@@ -70,7 +70,7 @@ namespace demo_webshop.Controllers
         }
 
         // GET: Home/Order
-        public IActionResult Order()
+        public IActionResult Order(List<string> errors)
         {
             List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(SessionKeyName) ?? new List<CartItem>();
 
@@ -82,11 +82,59 @@ namespace demo_webshop.Controllers
             decimal sum = 0;
             ViewBag.TotalPrice = cart.Sum(item => sum + item.GetTotal());
 
+            ViewBag.Errors = errors;
+
             return View(cart);
         
         }
 
         // POST: Home/Order
+        [HttpPost]
+        public IActionResult Order(Order new_order)
+        {
+            // 1. korak -> provjera ako je kosarica prazna
+            // 2. korak -> ako je model validan
+            // 3. korak -> pohrana u bazu, ciscenje kosarice, preusmjeravanje
+
+            List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(SessionKeyName) ?? new List<CartItem>();
+
+            if(cart.Count == 0)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var model_errors = new List<string>();
+
+            if (ModelState.IsValid)
+            {
+                // true
+                // Sva svojsta su validna
+                new_order.DateCreated = DateTime.Now;
+                
+                decimal sum = 0;
+                new_order.Total = cart.Sum(item => sum + item.GetTotal());
+
+
+                _context.Orders.Add(new_order);
+                _context.SaveChanges();
+
+
+            }
+            else
+            {
+                // false
+                // Nesto nije validno
+                foreach (var model_state in ModelState.Values)
+                {
+                    foreach (var find_error in model_state.Errors)
+                    {
+                        model_errors.Add(find_error.ErrorMessage);
+                    }
+                }
+            }
+
+            return RedirectToAction("Order", new { errors = model_errors });
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

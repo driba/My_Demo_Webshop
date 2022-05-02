@@ -33,7 +33,7 @@ namespace demo_webshop.Controllers
         [HttpPost]
         public IActionResult AddToCart(int productId, decimal quantity)
         {
-            //TODO: Ispraviti BUG koji omogućuje dodavanje proizvoda s 0 količinom!
+            // Done -> TODO: Ispraviti BUG koji omogućuje dodavanje proizvoda s 0 količinom!
             if (quantity <= 0)
             {
                 return RedirectToAction("Product", "Home", new { message = "Molimo odaberite količinu proizvoda." }); 
