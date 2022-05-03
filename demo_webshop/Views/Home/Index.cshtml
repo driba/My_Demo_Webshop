@@ -10,3 +10,10 @@
 @* Sesija: @ViewBag.CheckSession *@
 
 @ViewBag.GetTest
+
+@if (ViewBag.OrderMessage != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.OrderMessage
+    </div>
+}

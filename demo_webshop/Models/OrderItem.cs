@@ -25,5 +25,8 @@ namespace demo_webshop.Models
 
         [Column(TypeName = "decimal(9,2)")]
         public decimal Total { get; set; }
+
+        [NotMapped] // EF Core ce zanemariti svojstvo pa ovo nece postojati kao stupac tablice u bazi
+        public string ProductTitle { get; set; }
     }
 }

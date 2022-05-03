@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Title"] = "Create order";
+}
+
+<h1>Create new order</h1>
+
+@*
+    Podaci o kupcu = "Billing" polja iz klase order
+    Stavka narudzbe = proizvod s odabranom kolicinom
+
+    1. korak - unesi podatke o kupcu
+    2. korak - spremi narudzbu u bazu i preusmjeri na unos stavki
+    3. korak - odaberi jednu po jednu stavku i kolicinu te pohrani u bazu
+*@
+
+<div class="row">
+    <div class="col">
+        <div class="text-center">
+            <h5>Personal information</h5>
+        </div>
+        <form class="row" method="POST" asp-area="Admin" asp-controller="Order" asp-action="Create">
+
+            <div class="col-md-6 mb-3">
+                <label>First name *</label>
+                <input type="text" class="form-control" name="BillingFirstName" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Last name *</label>
+                <input type="text" class="form-control" name="BillingLastName" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Email *</label>
+                <input type="email" class="form-control" name="BillingEmail" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Phone *</label>
+                <input type="text" class="form-control" name="BillingPhone" />
+            </div>
+
+            
+            <div class="col-md-6 mb-3">
+                <label>Address *</label>
+                <input type="text" class="form-control" name="BillingAddress" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>City *</label>
+                <input type="text" class="form-control" name="BillingCity" />
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label>Country *</label>
+                <select class="form-control" name="BillingCountry">
+                    <option value="">-- Select Country --</option>
+                    <option value="Croatia">Croatia</option>
+                    <option value="Slovenia">Slovenia</option>
+                    <option value="Serbia">Serbia</option>
+                    <option value="Bosni and Herzegovina">Bosnia adn Herzegovina</option>
+                </select>
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Postal code *</label>
+                <input type="text" class="form-control" name="BillingZip"/>
+            </div>
+            <div class="col-md-12 mb-3">
+                <label>Message</label>
+                <textarea class="form-control" rows="5" name="Message"></textarea>
+            </div>
+
+            <div class="col-md-6 text-start">
+                <input type="submit" class="btn btn-success" value="Create order"/>
+            </div>
+
+        </form>
+    </div>
+</div>

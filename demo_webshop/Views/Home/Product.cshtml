@@ -52,13 +52,13 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-start">@item.Price kn</td>
+                                <td class="text-start"><span class="input-group-text">@item.Price kn</span></td>
                                 <td class="text-end">
                                     @*TODO: Forma za dodavanje u košaricu*@
                                     <form method="POST" asp-area="" asp-controller="Cart" asp-action="AddToCart">
                                         <input type="hidden" name="productId" value="@item.Id">
                                         <div class="input-group mb-3">
-                                            <input type="number" name="quantity" class="form-control-sm" min="1" max="@item.Quantity" value="1">
+                                            <input type="number" name="quantity" class="form-control form-control-sm text-center" min="1" max="@item.Quantity" value="1">
                                             <div class="input-group-append">
                                                 <button type="submit" class="btn btn-success">
                                                     <i class="fa-solid fa-cart-plus"></i>

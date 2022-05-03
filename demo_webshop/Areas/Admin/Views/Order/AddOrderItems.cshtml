@@ -1,0 +1,40 @@
+﻿<h1>Add new order item</h1>
+<hr />
+
+@* 
+    1. opcija - odabir proizvoda
+    2. opcija - unos zeljene kolicine
+*@
+
+<div class="row">
+    <div class="col">
+        <form class="row" asp-action="AddOrderItems">
+            <input type="hidden" name="OrderId" value="@ViewBag.OrderId" />
+            <div class="col-md-4">
+                <select name="ProductId" class="form-control">
+                    <option value="">Select product</option>
+                
+                    @foreach(var item in ViewBag.Products)
+                    {
+                        <option value="@item.Id">@item.Title (@item.Price)</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <input type="number" name="Quantity" placeholder="Enter quantity" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <input type="submit" class="btn btn-success" value="Add to order" />
+            </div>
+        </form>       
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <a class="btn btn-primary" asp-action="Index">Complete order</a>
+    </div>
+</div>

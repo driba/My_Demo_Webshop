@@ -1,0 +1,42 @@
+﻿@model IEnumerable<demo_webshop.Models.Order>
+
+<h1> Order list</h1>
+<hr />
+<div class="row mb-3">
+    <div class="col">
+        <a class="btn btn-primary" asp-action="Create">Create new order</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table">
+            <thead>
+                <th>@Html.DisplayNameFor(model => model.Id)</th>
+                <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
+                <th>@Html.DisplayNameFor(model => model.BillingEmail)</th>
+                <th>@Html.DisplayNameFor(model => model.Total)</th>
+                <th></th>
+            </thead>
+
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DateCreated)</td>
+                        <td>@Html.DisplayFor(modelItem => item.BillingEmail)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Total)</td>
+
+                        <td>
+                            <a>Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a>Delete</a>
+                        </td>
+                    </tr>
+                    
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

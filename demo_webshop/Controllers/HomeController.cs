@@ -18,7 +18,7 @@ namespace demo_webshop.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? message)
         {
             // Jednostavni test za provjeru ako je sesija aktivna
             // ViewBag.CheckSession = HttpContext.Session.IsAvailable;
@@ -27,6 +27,8 @@ namespace demo_webshop.Controllers
             HttpContext.Session.SetString("test", "Hej, ja sam sesija");
             // 
             ViewBag.GetTest = HttpContext.Session.GetString("test");
+
+            ViewBag.OrderMessage = message;
 
             return View();
         }
@@ -118,6 +120,24 @@ namespace demo_webshop.Controllers
                 _context.Orders.Add(new_order);
                 _context.SaveChanges();
 
+                foreach (var cart_item in cart)
+                {
+                    OrderItem item = new OrderItem()
+                    {
+                        OrderId = new_order.Id,
+                        ProductId = cart_item.Product.Id,
+                        Quantity = cart_item.Quantity,
+                        Price = cart_item.Product.Price,
+                        Total = cart_item.GetTotal()
+                    };
+
+                    _context.OrderItems.Add(item);
+                }
+                _context.SaveChanges();
+
+                HttpContext.Session.SetObjectAsJson(SessionKeyName, ""); // praznimo kosaricu, tj sesiju
+
+                return RedirectToAction("Index", new { message = "Hvala vam na vašoj narudžbi!" });
 
             }
             else
