@@ -40,6 +40,12 @@
             <div class="card">
                 <div class="card-body">
 
+                    @if (item.ImageName != null)
+                    {
+                        <p>
+                            <img src="~/images/@item.ImageName" style="width:100%; height=150px;">
+                        </p>
+                    }
                     <h5 class="card-title">@item.Title</h5>
                     <p class="card-text">@item.Description</p>
 

@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<demo_webshop.Models.Order>
-
+@if (ViewBag.Msg != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Msg
+    </div>
+}
 <h1> Order list</h1>
 <hr />
 <div class="row mb-3">
@@ -30,7 +35,7 @@
                         <td>
                             <a>Edit</a>
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a>Delete</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" >Delete</a>
                         </td>
                     </tr>
                     

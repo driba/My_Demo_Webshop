@@ -6,7 +6,7 @@
     2. opcija - unos zeljene kolicine
 *@
 
-<div class="row">
+<div class="row mb-4">
     <div class="col">
         <form class="row" asp-action="AddOrderItems">
             <input type="hidden" name="OrderId" value="@ViewBag.OrderId" />
@@ -33,8 +33,47 @@
     </div>
 </div>
 
+
+
 <div class="row">
     <div class="col">
-        <a class="btn btn-primary" asp-action="Index">Complete order</a>
+        <h4>Order ID: @ViewBag.OrderId</h4>
+        <hr />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total price</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                @if(ViewBag.SavedOrderItems != null)
+                {
+                    foreach(var item in ViewBag.SavedOrderItems)
+                    {
+                        <tr>
+                            <td>
+                                @(((List<Product>)ViewBag.Products).FirstOrDefault(p => p.Id == item.ProductId).Title)
+                            </td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price</td>
+                            <td>@item.Total</td>
+                            <td>
+                                <a class="btn btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Order" asp-action="Index">Complete order</a>
     </div>
 </div>

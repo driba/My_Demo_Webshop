@@ -23,5 +23,11 @@ namespace demo_webshop.Models
         [Column(TypeName = "decimal(9,2)")]
         public decimal Price { get; set; }
 
+        [Column(TypeName = "nvarchar(500)")]
+        public string? ImageName { get; set; }
+
+        [NotMapped]
+        public ICollection<OrderItem>? Items { get; set; }
+
     }
 }

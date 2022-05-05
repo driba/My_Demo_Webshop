@@ -60,5 +60,8 @@ namespace demo_webshop.Models
         public string? Message { get; set; }
 
         // TODO> OrderStatus (npr.: Cancel, Confirm, On Hold, Processing)
+
+        [NotMapped]
+        public ICollection<OrderItem>? Items { get; set; }
     }
 }

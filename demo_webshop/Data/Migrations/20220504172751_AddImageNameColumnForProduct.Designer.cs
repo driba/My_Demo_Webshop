@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using demo_webshop.Data;
 
@@ -11,9 +12,10 @@ using demo_webshop.Data;
 namespace demo_webshop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220504172751_AddImageNameColumnForProduct")]
+    partial class AddImageNameColumnForProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,7 +119,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("demo_webshop.Models.Order", b =>
@@ -185,7 +187,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("demo_webshop.Models.OrderItem", b =>
@@ -215,7 +217,9 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("demo_webshop.Models.Product", b =>
@@ -245,7 +249,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("demo_webshop.Models.ProductCategory", b =>
@@ -268,7 +272,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -420,15 +424,15 @@ namespace demo_webshop.Data.Migrations
             modelBuilder.Entity("demo_webshop.Models.OrderItem", b =>
                 {
                     b.HasOne("demo_webshop.Models.Order", "Order")
-                        .WithMany("Items")
+                        .WithMany()
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("demo_webshop.Models.Product", "Product")
-                        .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -504,16 +508,6 @@ namespace demo_webshop.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("demo_webshop.Models.Order", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("demo_webshop.Models.Product", b =>
-                {
-                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

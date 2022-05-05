@@ -72,7 +72,7 @@ namespace demo_webshop.Areas.Admin.Controllers
         // POST: Admin/Product/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Product product, int[] category_id)
+        public ActionResult Create(Product product, int[] category_id, IFormFile Image)
         {
             // 1. korak -> provjeri ako category_id nije prazan ili null
             if(category_id.Length == 0)
@@ -84,8 +84,21 @@ namespace demo_webshop.Areas.Admin.Controllers
 
             try
             {
-                // 2. korak -> unesi proizvod i vrati "Id" unesenog proizvoda
-                _context.Products.Add(product);
+                // 1.1. korak - spremi sliku na disk i spremi naziv slike u svojstvo product.ImageName
+                
+                var image_name = DateTime.Now.ToString("yyy-MM-dd-hh-mm-ss") + "-" + Image.FileName.ToLower();
+                
+                var save_image_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", image_name);
+
+                using (var stream = new FileStream(save_image_path, FileMode.Create))
+                {
+                    Image.CopyTo(stream);
+                }
+
+                product.ImageName = image_name;
+
+                    // 2. korak -> unesi proizvod i vrati "Id" unesenog proizvoda
+                    _context.Products.Add(product);
                 _context.SaveChanges(); // nakon pohrane u tablicu, dobiva se vrijednost Id
 
                 int idProduct = product.Id;
@@ -243,9 +256,9 @@ namespace demo_webshop.Areas.Admin.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return RedirectToAction("Delete", new { msg = ex });
             }
         }
     }

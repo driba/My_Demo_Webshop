@@ -9,7 +9,7 @@ namespace demo_webshop.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class OrderController : Controller
     {
-        
+
 
         private readonly ApplicationDbContext _context;
 
@@ -19,8 +19,9 @@ namespace demo_webshop.Areas.Admin.Controllers
         }
 
         // GET: Admin/Order
-        public IActionResult Index()
+        public IActionResult Index(string? msg)
         {
+            ViewBag.Msg = msg;
             return View(_context.Orders);
         }
 
@@ -65,11 +66,12 @@ namespace demo_webshop.Areas.Admin.Controllers
         // GET: Admin/Order/Create
         public IActionResult Create()
         {
-            return View();        
+            return View();
         }
 
         //POST: Admin/Order/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Order new_order)
         {
             new_order.DateCreated = DateTime.Now;
@@ -89,32 +91,42 @@ namespace demo_webshop.Areas.Admin.Controllers
 
 
         // GET: Admin/Order/AddOrderItems/5
-        public IActionResult AddOrderItems(int id)
+        public IActionResult AddOrderItems(int id, string? msg)
         {
             ViewBag.OrderId = id;
             ViewBag.Products = _context.Products.ToList();
-
+            ViewBag.SavedOrderItems = _context.OrderItems.Where(p => p.OrderId == id).ToList();
             return View();
         }
 
         // POST: Admin/Order/AddOrderItems/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddOrderItems(OrderItem new_order_item)
         {
+            // 0. korak - provjeri ako je kolicina 0
+            if (new_order_item.Quantity == 0)
+            {
+                return RedirectToAction("AddOrderItems", new { id = new_order_item.OrderId });
+            }
             // 1. korak - pronadi proizvod za detalje
             Product find_product = _context.Products.FirstOrDefault(p => p.Id == new_order_item.ProductId);
 
-            // 2. korak - provjeri ako je kolicina zadovoljacajuca
+            // 2. korak - provjeri ako je kolicina zadovoljavajuca
             if (new_order_item.Quantity > find_product.Quantity)
             {
-                return RedirectToAction("AddOrderItems", new { id = new_order_item.OrderId});
+                return RedirectToAction("AddOrderItems", new { id = new_order_item.OrderId });
             }
 
             // 3. korak - azuriraj ostala svojstva parametra stavke narudzbe
+            new_order_item.Id = 0; // jer je autoincrement u OrderItems tablici
             new_order_item.Price = find_product.Price;
             new_order_item.Total = new_order_item.Quantity * new_order_item.Price;
             _context.OrderItems.Add(new_order_item);
             _context.SaveChanges();
+
+            // 3.1 korak - umanji kolicinu proizvoda iz tablice Products (stupac Quantity)
+
 
             // 4. korak - azuriraj ukupnu cijenu narudzbe
             Order find_order = _context.Orders.FirstOrDefault(o => o.Id == new_order_item.OrderId);
@@ -126,8 +138,52 @@ namespace demo_webshop.Areas.Admin.Controllers
             // 5. korak - preusmjeri i nastavi s unosom
             return RedirectToAction("AddOrderItems", new { id = new_order_item.OrderId, msg = "Stavka uspješno dodana!" });
 
+        }
 
+        // GET: Admin/Order/Edit/5
+        public IActionResult Edit(int id)
+        {
+            return View();
+        }
 
+        // POST: Admin/Order/Edit/5
+        [HttpPost]
+        public IActionResult Edit(Order edit_order, OrderItem edit_items)
+        {
+            return View();
+        }
+
+        // GET: Admin/Order/Delete
+        public IActionResult Delete(int id)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var find_order = _context.Orders.FirstOrDefault(o => o.Id == id);
+            if (find_order == null)
+            {
+                return RedirectToAction("Index", new { msg = "Narudžba nije prondađena!" });
+            }
+
+            return View(find_order);
+        }
+
+        // POST: Admin/Order/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirm(int id)
+        {
+            var find_order = _context.Orders.Find(id);
+            if (find_order == null)
+            {
+                return RedirectToAction("Index", new { msg = "Narudžba nije pronađena!" });
+            }
+            _context.Orders.Remove(find_order);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", new { msg = "Narudžba je uspješno obrisana!" });
         }
     }
 }

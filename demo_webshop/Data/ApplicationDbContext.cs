@@ -27,6 +27,27 @@ namespace demo_webshop.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // Dodatno podesavanje ogranicenja izmedu OrderItem i Order
+            builder
+                .Entity<OrderItem>()
+                .HasOne<Order>(o => o.Order)
+                .WithMany(oi => oi.Items)
+                .HasForeignKey(o => o.OrderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Dodatno podesavanje ogranicenja izmedu OrderItem i Product
+            builder
+                .Entity<OrderItem>()
+                .HasOne(p => p.Product)
+                .WithMany(oi => oi.Items)
+                .HasForeignKey(o => o.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
