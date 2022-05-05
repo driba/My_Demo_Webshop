@@ -1,0 +1,34 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    
+# Set enviroment variables
+env:
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+  # vrijednost "test-webshop-100" zamijenite s nazivom vaše aplikacije na Heroku Cloud servisu
+  APP_NAME: ${{ 'riba-webshop' }}
+
+jobs:
+  build:
+    name: Deploy to Heroku
+    runs-on: ubuntu-latest
+    steps:
+
+    # Clone the repository
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Build Docker image
+    - name: Docker build
+      run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+
+    # Push the Docker image to Heroku Container Registry
+    - name: Publish
+      run: |
+        cd ./demo_webshop
+        heroku container:push web -a $APP_NAME
+        heroku container:release web -a $APP_NAME
