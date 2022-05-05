@@ -12,7 +12,7 @@ using demo_webshop.Data;
 namespace demo_webshop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220504183701_UpdateOrderItemForeignKeys")]
+    [Migration("20220505155221_UpdateOrderItemForeignKeys")]
     partial class UpdateOrderItemForeignKeys
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -216,6 +216,8 @@ namespace demo_webshop.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
                 });
@@ -429,7 +431,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasOne("demo_webshop.Models.Product", "Product")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

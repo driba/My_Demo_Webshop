@@ -8,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (builder.Environment.IsEnvironment("Production"))
+{
+    connectionString = Environment.GetEnvironmentVariable("WEB_HEROKU_CONN_STRING");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -37,6 +42,18 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Test za okruzenje
+//app.Run(async (context) =>
+//{
+//    await context.Response.WriteAsync(
+//        "Ako je ovo produkcija? " + app.Environment.IsEnvironment("Production") + "\n\n" +
+//        "Environment variable = " + app.Environment.EnvironmentName + "\n\n" +
+//        "connectionString = " + connectionString
+//    );
+//});
+
+
 
 // Postavke za decimalnu točku
 var defaultDateCulture = "de-De";

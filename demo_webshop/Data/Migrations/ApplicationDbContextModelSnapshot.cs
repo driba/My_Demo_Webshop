@@ -117,7 +117,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("demo_webshop.Models.Order", b =>
@@ -185,7 +185,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("demo_webshop.Models.OrderItem", b =>
@@ -215,7 +215,9 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("demo_webshop.Models.Product", b =>
@@ -245,7 +247,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("demo_webshop.Models.ProductCategory", b =>
@@ -268,7 +270,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -427,7 +429,7 @@ namespace demo_webshop.Data.Migrations
 
                     b.HasOne("demo_webshop.Models.Product", "Product")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
