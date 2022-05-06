@@ -31,7 +31,7 @@ namespace demo_webshop.Data
         {
             base.OnModelCreating(builder);
 
-            // Dodatno podesavanje ogranicenja izmedu OrderItem i Order
+            // Dodatno podešavanje ograničenja između OrderItem i Order
             builder
                 .Entity<OrderItem>()
                 .HasOne<Order>(o => o.Order)
@@ -39,13 +39,14 @@ namespace demo_webshop.Data
                 .HasForeignKey(o => o.OrderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Dodatno podesavanje ogranicenja izmedu OrderItem i Product
+            // Dodatno ograničenje između OrderItem i Product
             builder
                 .Entity<OrderItem>()
                 .HasOne(p => p.Product)
                 .WithMany(oi => oi.Items)
                 .HasForeignKey(o => o.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
         }
 
         public DbSet<Order> Orders { get; set; }

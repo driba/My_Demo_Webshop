@@ -12,8 +12,8 @@ using demo_webshop.Data;
 namespace demo_webshop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220505155221_UpdateOrderItemForeignKeys")]
-    partial class UpdateOrderItemForeignKeys
+    [Migration("20220505232845_UpdateOrderItemForeignKey")]
+    partial class UpdateOrderItemForeignKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
